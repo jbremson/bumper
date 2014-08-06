@@ -59,7 +59,7 @@ bmp_persist() { cat /dev/null > ~/.bmp_persist;
 		done }
 		
 ##Reset the .bmp_persist file
-bmp_reset() { echo ${HOME} > ~/.bmp_persist; }
+bmp_reset() { echo ${HOME} > ~/.bmp_persist; bmp_load; }
 
 bmp_help() { echo "
 bmp - a directory memory utility
