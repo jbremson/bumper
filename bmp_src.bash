@@ -11,11 +11,7 @@ export DIR_ARR=( ${HOME} )
 #shortcut to bmp_grab
 grab() { bmp_grab; }
 
-#grab pushes the curdir onto the array $DIR_ARR
-
-#NOTES for bmp_check - uses array_contains <new dir> ${DIR_ARR[@]}
-# then check value of $?. If $? = 1 then it isn't in the array
-# (I think). If $?=0 then it is. 
+#bmp_grab pushes the curdir onto the array $DIR_ARR
 bmp_grab() { array_contains `pwd` "${DIR_ARR[@]}"
 		if [ $? -eq 1 ]; then
 		   DIR_ARR=( ${DIR_ARR[*]} `pwd` ); 
