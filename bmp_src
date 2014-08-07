@@ -3,16 +3,7 @@
 # A directory memory utility. Keep track of several pesky
 # directories that you are bouncing in and out of.
 
-#Installation
-#--------------------------------------------------------------
-#
-# 1. Place .bmp_src (this file - name it .bmp_src)
-#   in your user directory, with your bashrc.
-# 2. In your .bashrc 'source ~/.bmp_src'
-# 3. See bmp_help for usage.
-#
 # Joel Bremson - August 5, 2014
-
 
 
 export DIR_INDEX=0
@@ -21,15 +12,20 @@ export DIR_ARR=( ${HOME} )
 grab() { bmp_grab; }
 
 #grab pushes the curdir onto the array $DIR_ARR
-bmp_grab() { DIR_ARR=( ${DIR_ARR[*]} `pwd` ); 
-			echo grabbed `pwd`;
-			bmp_inc;
-			bmp_persist;
-			export DIR_ARR; }
 
-## increment the index counter
-bmp_inc() { let c=$(( ($DIR_INDEX + 1) % ${#DIR_ARR[@]} )); 
-		export DIR_INDEX=$c; } 
+#NOTES for bmp_check - uses array_contains <new dir> ${DIR_ARR[@]}
+# then check value of $?. If $? = 1 then it isn't in the array
+# (I think). If $?=0 then it is. 
+bmp_grab() { array_contains `pwd` "${DIR_ARR[@]}"
+		if [ $? -eq 1 ]; then
+		   DIR_ARR=( ${DIR_ARR[*]} `pwd` ); 
+		   echo grabbed `pwd`;
+		   bmp_inc;
+		   bmp_persist;
+		   export DIR_ARR; 
+		else
+		  echo "directory on stack already"
+		fi }
 
 ##bmp cd's to the next dir in $DIR_ARR
 bmp() { bmp_inc; 
@@ -42,6 +38,9 @@ bmp_cat() { cat ~/.bmp_persist; }
 ##edit the bmp list
 bmp_edit() { vi ~/.bmp_persist; 
 		bmp_load; }
+
+##Reset the .bmp_persist file
+bmp_reset() { echo ${HOME} > ~/.bmp_persist; bmp_load; }
 
 ##load the .bmp_persist file into DIR_ARR
 ##PRIVATE
@@ -58,9 +57,26 @@ bmp_persist() { cat /dev/null > ~/.bmp_persist;
 			echo $dir >> ~/.bmp_persist
 		done }
 		
-##Reset the .bmp_persist file
-bmp_reset() { echo ${HOME} > ~/.bmp_persist; bmp_load; }
+## increment the index counter
+#PRIVATE
+bmp_inc() { let c=$(( ($DIR_INDEX + 1) % ${#DIR_ARR[@]} )); 
+		export DIR_INDEX=$c; } 
 
+## check if a dir is already in DIR_ARRAY helper
+#PRIVATE
+array_contains () {
+    local seeking=$1; shift
+    local in=1
+    for element; do
+        if [[ $element == $seeking ]]; then
+            in=0
+            break
+        fi
+    done
+    return $in
+}
+
+# help doc
 bmp_help() { echo "
 bmp - a directory memory utility
 ---------------------------------------------------------------
@@ -98,16 +114,8 @@ hand edit ~/.bmp_persist. To just look at your list type
 'bmp_cat'. 
 
 
-Installation
---------------------------------------------------------------
-
-1. Place .bmp_src in your user directory, with your bashrc, 
-   or wherever.
-2. In your .bashrc 'source ~/.bmp_src'
-
-
 Joel Bremson
 August 6, 2014"; }
 
-## get bmp setup on load.p
+## get bmp setup on load.
 bmp_load
