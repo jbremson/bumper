@@ -1,5 +1,3 @@
-#!/bin/bash
-
 #### bmp #######
 
 # A directory memory utility. Keep track of several pesky

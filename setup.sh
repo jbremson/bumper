@@ -1,6 +1,6 @@
 #!/bin/sh
 
-cp ./bmp_src ~/.bmp_src
+cp ./bmp_src.bash ~/.bmp_src
 
 # Edit .bashrc to load bmp_src, but only do it 
 # if it is not already there.
