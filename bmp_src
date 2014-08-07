@@ -6,8 +6,8 @@
 #Installation
 #--------------------------------------------------------------
 #
-# 1. Place .bmp_src in your user directory, with your bashrc, 
-#   or wherever.
+# 1. Place .bmp_src (this file - name it .bmp_src)
+#   in your user directory, with your bashrc.
 # 2. In your .bashrc 'source ~/.bmp_src'
 # 3. See bmp_help for usage.
 #
