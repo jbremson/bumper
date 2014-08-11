@@ -8,6 +8,7 @@
 
 export DIR_INDEX=0
 export DIR_ARR=( ${HOME} )
+export MEM_FILE=~/.mem_file
 #shortcut to bmp_grab
 grab() { bmp_grab; }
 
@@ -28,12 +29,24 @@ bmp() { bmp_inc;
 	cd ${DIR_ARR[$DIR_INDEX]};
 	echo in `pwd`; }
 
+##remember the last command - and keep track of what it does.
+## usage mem '<comment>'
+mem() { echo "# $1" >> ${MEM_FILE};
+	echo `history | tail -2 | head -1` >> ${MEM_FILE}; }
+	
+
 ##cat the bmp list
 bmp_cat() { cat ~/.bmp_persist; }
+
+##cat the mem list
+mem_cat() { cat ${MEM_FILE}; }
 
 ##edit the bmp list
 bmp_edit() { vi ~/.bmp_persist; 
 		bmp_load; }
+
+##edit the mem file
+mem_edit() { vi ${MEM_FILE}; }
 
 ##Reset the .bmp_persist file
 bmp_reset() { echo ${HOME} > ~/.bmp_persist; bmp_load; }
