@@ -124,6 +124,17 @@ bmp_help	Print this help message.
 bmp_cat		Print the bmp directory list.		
 bmp_reset	Reset the bmp directory list to the default.
 
+mem             Remember the last command in a file i\$MEM_FILE.
+                Syntax is: mem '<comment>'.
+mem_cat         Cat the the file \$MEM_FILE.
+mem_edit        Edit the file \$MEM_FILE.
+
+note		Write a note in the file \$NOTE_FILE. 
+		Syntax is: note [-d] '<comment>'
+		The -d flag will put a date stamp in the file.
+note_cat	Cat the \$NOTE_FILE.	
+note_edit	Edit the \$NOTE_FILE in vi.
+		 
 
 Usage
 --------------------------------------------------------------
