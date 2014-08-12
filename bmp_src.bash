@@ -9,6 +9,7 @@
 export DIR_INDEX=0
 export DIR_ARR=( ${HOME} )
 export MEM_FILE=~/.mem_file
+export NOTE_FILE=~/.note_file
 #shortcut to bmp_grab
 grab() { bmp_grab; }
 
@@ -34,12 +35,26 @@ bmp() { bmp_inc;
 mem() { echo "# $1" >> ${MEM_FILE};
 	echo `history | tail -2 | head -1` >> ${MEM_FILE}; }
 	
+note() { if [ "$1" = "-d" ]; then # put a date stamp in
+		echo $'\n'`date` >> $NOTE_FILE;
+		str=$2;
+   	else
+		str=$1;
+	fi
+	echo "${str}"$'\n' >> $NOTE_FILE; }
+	
+#private cat
+p_cat() { cat ${1}; }
 
 ##cat the bmp list
 bmp_cat() { cat ~/.bmp_persist; }
 
 ##cat the mem list
-mem_cat() { cat ${MEM_FILE}; }
+mem_cat() { p_cat ${MEM_FILE}; }
+
+##cat the note list
+note_cat() { p_cat ${NOTE_FILE}; }
+
 
 ##edit the bmp list
 bmp_edit() { vi ~/.bmp_persist; 
@@ -47,6 +62,9 @@ bmp_edit() { vi ~/.bmp_persist;
 
 ##edit the mem file
 mem_edit() { vi ${MEM_FILE}; }
+
+##edit the note file
+note_edit() { vi ${NOTE_FILE}; }
 
 ##Reset the .bmp_persist file
 bmp_reset() { echo ${HOME} > ~/.bmp_persist; bmp_load; }
