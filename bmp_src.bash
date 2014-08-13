@@ -32,8 +32,15 @@ bmp() { bmp_inc;
 
 ##remember the last command - and keep track of what it does.
 ## usage mem '<comment>'
-mem() { echo "# $1" >> ${MEM_FILE};
-	echo `history | tail -2 | head -1` >> ${MEM_FILE}; }
+mem() { 
+        if [ $# -eq 1 ]; then
+          back=-2;
+          echo "# $1" >> ${MEM_FILE};
+        else
+          let back=`expr $1-1`;
+          echo "# $2" >> ${MEM_FILE};
+        fi
+	echo `history | tail ${back} | head -1` >> ${MEM_FILE}; }
 	
 note() { if [ "$1" = "-d" ]; then # put a date stamp in
 		echo $'\n'`date` >> $NOTE_FILE;
@@ -125,7 +132,11 @@ bmp_cat		Print the bmp directory list.
 bmp_reset	Reset the bmp directory list to the default.
 
 mem             Remember the last command in a file i\$MEM_FILE.
-                Syntax is: mem '<comment>'.
+                Syntax is: mem [-n] '<comment>'.
+
+                If a [-n] (n is integer) supplied the mem will
+                jump back n rows of history.
+                -n commands
 mem_cat         Cat the the file \$MEM_FILE.
 mem_edit        Edit the file \$MEM_FILE.
 
