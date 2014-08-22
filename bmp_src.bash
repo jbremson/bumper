@@ -10,6 +10,8 @@ export DIR_INDEX=0
 export DIR_ARR=( ${HOME} )
 export MEM_FILE=~/.mem_file
 export NOTE_FILE=~/.note_file
+export GOAL_FILE=~/.goal_file
+export ACTIVE_FILE=''
 #shortcut to bmp_grab
 grab() { bmp_grab; }
 
@@ -42,13 +44,19 @@ mem() {
         fi
 	echo `history | tail ${back} | head -1` >> ${MEM_FILE}; }
 	
-note() { if [ "$1" = "-d" ]; then # put a date stamp in
-		echo $'\n'`date` >> $NOTE_FILE;
-		str=$2;
+# note taker (note [-d] "my note" -- -d adds a date
+note() { base_note ${NOTE_FILE} "$@"; } 
+# goal tracker (goal [-d] "my goal" -- -d adds a date
+goal() { base_note ${GOAL_FILE} "$@"; }
+	
+## private - note writer base function.
+base_note() { if [ "$2" = "-d" ]; then # put a date stamp in
+		echo $'\n'`date` >> $1;
+		str=$3;
    	else
-		str=$1;
+		str=$2;
 	fi
-	echo "${str}"$'\n' >> $NOTE_FILE; }
+	echo "${str}"$'\n' >> $1; }
 	
 #private cat
 p_cat() { cat ${1}; }
@@ -57,11 +65,13 @@ p_cat() { cat ${1}; }
 bmp_cat() { cat ~/.bmp_persist; }
 
 ##cat the mem list
-mem_cat() { p_cat ${MEM_FILE}; }
+
+
 
 ##cat the note list
 note_cat() { p_cat ${NOTE_FILE}; }
 
+goal_cat() { p_cat ${GOAL_FILE}; }
 
 ##edit the bmp list
 bmp_edit() { vi ~/.bmp_persist; 
@@ -72,6 +82,8 @@ mem_edit() { vi ${MEM_FILE}; }
 
 ##edit the note file
 note_edit() { vi ${NOTE_FILE}; }
+
+goal_edit() { vi ${GOAL_FILE}; }
 
 ##Reset the .bmp_persist file
 bmp_reset() { echo ${HOME} > ~/.bmp_persist; bmp_load; }
