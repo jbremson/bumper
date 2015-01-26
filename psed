@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# global project sed tool.
+# usage: psed <target> <replacement>
+
+BASE='<base directory>'
+
+FILES=( file1.py
+        file2.py
+        ...
+)
+
+for file in ${FILES[@]}; do
+  count=`cat $BASE/$file | grep -c $1` 
+  if [ "$count" -gt 0 ]; then
+    echo "$count instances in $file - changing."
+    out="$BASE/$file"
+    sed -i "s/${1}/${2}/" $out 
+  fi  
+done
