@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# Usage: prep <text string to grep for>
+
+BASE='<base dir>'
+
+FILES=( file1.py
+        file2.py
+        ....
+)
+
+for file in ${FILES[@]}; do
+  count=`cat $BASE/$file | grep -c "$1"`
+  if [ "$count" -gt 0 ]; then
+    out=`cat ${BASE}/${file} | grep -n "$1"`
+    echo $file
+    echo ========================================
+    echo "$out"
+    echo 
+  fi  
+done
