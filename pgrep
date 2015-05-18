@@ -1,21 +1,29 @@
+
 #!/bin/bash
 
-# Usage: prep <text string to grep for>
+# Prints a pretty search and grep in a python file hierarchy.
+# Searches all files with '.py' extensions.
 
-BASE='<base dir>'
+# Usage: pgrep.sh "search string"
+# Set PGREP_DIR to the base directory or set a default dir in this script.
 
-FILES=( file1.py
-        file2.py
-        ....
-)
-
-for file in ${FILES[@]}; do
-  count=`cat $BASE/$file | grep -c "$1"`
-  if [ "$count" -gt 0 ]; then
-    out=`cat ${BASE}/${file} | grep -n "$1"`
-    echo $file
-    echo ========================================
-    echo "$out"
-    echo 
-  fi  
-done
+CURDIR=`pwd`
+if [ -z ${PGREP_DIR+x} ]; then
+        PGREP_DIR='/home/joel/PyCharmProjects/scheduler/';
+else
+        echo "PGREP_DIR is set!";
+fi
+cd "$PGREP_DIR"
+for file in `find . -name "*.py"`; do
+        count=`cat $file | grep -c "$1"`
+        if [ "$count" -gt 0 ]; then
+                if [ -e $file ]; then
+                        echo $file
+                        echo ====================
+                        cat $file | grep -n "$1"
+                        echo
+                fi
+        fi
+done;
+echo "Working from PGREP_DIR =${PGREP_DIR}"
+cd $CURDIR
