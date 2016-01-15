@@ -6,4 +6,4 @@ A bash utility for easily remembering pesky directories you're jumping in and ou
 To Install:
 ===========
 
-source setup.py
+source setup.sh
